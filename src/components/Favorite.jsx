@@ -16,11 +16,11 @@ function Favorite(props) {
       className="favorite-link col-5 col-sm-4 col-lg-3 col-xl-2 d-flex justify-content-evenly flex-column text-center"
       style={{ height: "25vh" }}
     >
-        <div>
-          <div>{props.city.name}</div>
-          <div>{props.city.metricValue + "°C"}</div>
-        </div>
-        <div>{props.city.weatherText}</div> 
+      <div>
+        <div>{props.city.name}</div>
+        <div>{props.city.metricValue + "°C"}</div>
+      </div>
+      <div>{props.city.weatherText}</div>
     </NavLink>
   );
 }

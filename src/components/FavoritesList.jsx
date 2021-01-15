@@ -6,7 +6,7 @@ function FavoritesList() {
   const context = useContext(AppContext);
 
   return (
-    <div className="container bg-dark" style={{height: "95vh"}}>
+    <div className="container bg-dark" style={{ height: "95vh" }}>
       <div className="row d-flex justify-content-center justify-content-xl-start">
         {context.favoritesArray.map((city) => (
           <Favorite city={city} key={city.id} />

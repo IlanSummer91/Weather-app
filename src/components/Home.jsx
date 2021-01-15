@@ -14,95 +14,12 @@ function Home() {
   const [dailyForecastArray, setDailyForecastArray] = useState([]);
   const [isFavorited, setIsFavorited] = useState(false);
   const context = useContext(AppContext);
-  const arrayTest = [
-    {
-      Date: "2021-01-13T07:00:00+02:00",
-      Temperature: { Maximum: { Value: 38 } },
-      EpochDate: 1610514000,
-    },
-    {
-      Date: "2021-01-14T07:00:00+02:00",
-      Temperature: { Maximum: { Value: 38 } },
-      EpochDate: 1610600400,
-    },
-    {
-      Date: "2021-01-15T07:00:00+02:00",
-      Temperature: { Maximum: { Value: 38 } },
-      EpochDate: 1610686800,
-    },
-    {
-      Date: "2021-01-16T07:00:00+02:00",
-      Temperature: { Maximum: { Value: 38 } },
-      EpochDate: 1610773200,
-    },
-    {
-      Date: "2021-01-17T07:00:00+02:00",
-      Temperature: { Maximum: { Value: 38 } },
-      EpochDate: 1610859600,
-    },
-  ];
 
   const searchHandler = async (
     location = context.clickedFavoriteLocation || "tel aviv"
   ) => {
     const searchValue = searchRef.current.value || location;
-    // const result = await fetchCity(searchValue || "tel aviv");
-    console.log(searchValue)
-
-    const result = [
-      {
-        Key: 213,
-        LocalizedName: "Tel Aviv",
-      },
-      {
-        Key: 214,
-        LocalizedName: "Haifa",
-      },
-      {
-        Key: 215,
-        LocalizedName: "Jerusalem",
-      },
-      {
-        Key: 216,
-        LocalizedName: "Hadera",
-      },
-      {
-        Key: 217,
-        LocalizedName: "Netanya",
-      },
-      {
-        Key: 218,
-        LocalizedName: "qwe",
-      },
-      {
-        Key: 219,
-        LocalizedName: "asd",
-      },
-      {
-        Key: 220,
-        LocalizedName: "zxc",
-      },
-      {
-        Key: 221,
-        LocalizedName: "wer",
-      },
-      {
-        Key: 222,
-        LocalizedName: "sdf",
-      },
-    ];
-
-    const currentWeather = [
-      {
-        WeatherText: "Cloudy",
-        Temperature: { Metric: { Value: 24.0 } },
-      },
-    ];
-
-    setDailyForecastArray(arrayTest);
-
-    // const result = [];
-    // const currentWeather = [];
+    const result = await fetchCity(searchValue || "tel aviv");
 
     const foundCity = result.find(
       (cityObj) =>
@@ -111,10 +28,10 @@ function Home() {
     if (result.length <= 0) {
       alert("City doesn't exist! please make sure to only use English letters");
     } else if (foundCity !== undefined) {
-      // const currentWeather = await fetchCurrentWeatherByCity(foundCity.Key);
-      // setDailyForecastArray(
-      //   (await fetchFiveDayfDailyForecasts(foundCity.Key)).DailyForecasts
-      // );
+      const currentWeather = await fetchCurrentWeatherByCity(foundCity.Key);
+      setDailyForecastArray(
+        (await fetchFiveDayfDailyForecasts(foundCity.Key)).DailyForecasts
+      );
       if (currentWeather.length <= 0) {
         alert("Something is wrong, please contact our support team");
       } else {
@@ -174,75 +91,83 @@ function Home() {
             type="search"
             placeholder="&#xf002; Search"
           />
-          <button className="h-50" style={{fontSize: "16px", width: "80px"}} onClick={() => searchHandler()}>Search</button>
-        </div>
-      </div>
-    <div className="container bg-dark" style={{ height: "80vh" }}>
-      <div className="row favorites-row overflow-hidden" style={{height: "26%"}}>
-        <div className="col m-5 d-flex justify-content-between">
-          <div>
-            <h3 className="overflow-hidden">{city.name}</h3>
-            <span>{city.metricValue + "°C"}</span>
-          </div>
-          <div>
-            <div className="d-flex justify-content-center align-items-center">
-              {isFavorited ? (<i
-                className="favorited star fa fa-star p-2"
-                aria-hidden="true"
-                onClick={removeFromFavoritesHandler}
-              ></i>) :
-              (<i
-                className="star fa fa-star p-2"
-                aria-hidden="true"
-                onClick={addToFavoritesHandler}
-              ></i>)}
-              {isFavorited ? (
-                <button
-                  className="d-flex align-items-center justify-content-center btn btn-outline-light favorite-button overflow-hidden"
-                  
-                  onClick={removeFromFavoritesHandler}
-                >
-                  Remove from Favorites
-                </button>
-              ) : (
-                <button
-                  className="d-flex align-items-center justify-content-center btn btn-outline-light favorite-button overflow-hidden"
-                  
-                  onClick={addToFavoritesHandler}
-                >
-                  Add <br/> to Favorites
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row m-2 h-25 weather-text-row">
-        <div className="col d-flex justify-content-center display-1">
-          {city.weatherText}
-        </div>
-      </div>
-      <div
-        className="row d-flex justify-content-around five-day-row m-2"
-      >
-        {dailyForecastArray.map((todaysWeather) => (
-          <div
-            key={todaysWeather.EpochDate}
-            className="col-5 col-md-3 col-xl-2 border d-flex justify-content-evenly align-items-center flex-column m-3"
-            style={{height: "25vh"}}
+          <button
+            className="h-50"
+            style={{ fontSize: "16px", width: "80px" }}
+            onClick={() => searchHandler()}
           >
+            Search
+          </button>
+        </div>
+      </div>
+      <div className="container bg-dark" style={{ height: "80vh" }}>
+        <div
+          className="row favorites-row overflow-hidden"
+          style={{ height: "26%" }}
+        >
+          <div className="col m-5 d-flex justify-content-between">
             <div>
-              {new Date(todaysWeather.Date).toLocaleDateString("en-us", {
-                weekday: "long",
-              })}
+              <h3 className="overflow-hidden">{city.name}</h3>
+              <span>{city.metricValue + "°C"}</span>
             </div>
             <div>
-              {Math.round(todaysWeather.Temperature.Maximum.Value) + "°C"}
+              <div className="d-flex justify-content-center align-items-center">
+                {isFavorited ? (
+                  <i
+                    className="favorited star fa fa-star p-2"
+                    aria-hidden="true"
+                    onClick={removeFromFavoritesHandler}
+                  ></i>
+                ) : (
+                  <i
+                    className="star fa fa-star p-2"
+                    aria-hidden="true"
+                    onClick={addToFavoritesHandler}
+                  ></i>
+                )}
+                {isFavorited ? (
+                  <button
+                    className="d-flex align-items-center justify-content-center btn btn-outline-light favorite-button overflow-hidden"
+                    onClick={removeFromFavoritesHandler}
+                  >
+                    Remove from Favorites
+                  </button>
+                ) : (
+                  <button
+                    className="d-flex align-items-center justify-content-center btn btn-outline-light favorite-button overflow-hidden"
+                    onClick={addToFavoritesHandler}
+                  >
+                    Add <br /> to Favorites
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        ))}
+        </div>
+        <div className="row m-2 h-25 weather-text-row">
+          <div className="col d-flex justify-content-center display-1">
+            {city.weatherText}
+          </div>
+        </div>
+        <div className="row d-flex justify-content-around five-day-row m-2">
+          {dailyForecastArray.map((todaysWeather) => (
+            <div
+              key={todaysWeather.EpochDate}
+              className="col-5 col-md-3 col-xl-2 border d-flex justify-content-evenly align-items-center flex-column m-3"
+              style={{ height: "25vh" }}
+            >
+              <div>
+                {new Date(todaysWeather.Date).toLocaleDateString("en-us", {
+                  weekday: "long",
+                })}
+              </div>
+              <div>
+                {Math.round(todaysWeather.Temperature.Maximum.Value) + "°C"}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
     </div>
   );
 }
