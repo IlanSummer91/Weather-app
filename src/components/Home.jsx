@@ -47,6 +47,7 @@ function Home() {
   ) => {
     const searchValue = searchRef.current.value || location;
     // const result = await fetchCity(searchValue || "tel aviv");
+    console.log(searchValue)
 
     const result = [
       {
@@ -167,16 +168,17 @@ function Home() {
       <div className="row search-row" style={{ height: "15vh" }}>
         <div className="d-flex justify-content-center align-items-center m-4">
           <input
-            className="col-4"
+            className="col-4 h-50"
             ref={searchRef}
             onKeyUp={(e) => e.code === "Enter" && searchHandler()}
             type="search"
             placeholder="&#xf002; Search"
           />
+          <button className="h-50" style={{fontSize: "16px", width: "80px"}} onClick={() => searchHandler()}>Search</button>
         </div>
       </div>
     <div className="container bg-dark" style={{ height: "80vh" }}>
-      <div className="row favorites-row h-25">
+      <div className="row favorites-row overflow-hidden" style={{height: "26%"}}>
         <div className="col m-5 d-flex justify-content-between">
           <div>
             <h3 className="overflow-hidden">{city.name}</h3>
@@ -197,7 +199,7 @@ function Home() {
               {isFavorited ? (
                 <button
                   className="d-flex align-items-center justify-content-center btn btn-outline-light favorite-button overflow-hidden"
-                  style={{width: "20vw"}}
+                  
                   onClick={removeFromFavoritesHandler}
                 >
                   Remove from Favorites
@@ -205,28 +207,28 @@ function Home() {
               ) : (
                 <button
                   className="d-flex align-items-center justify-content-center btn btn-outline-light favorite-button overflow-hidden"
-                  style={{width: "20vw"}}
+                  
                   onClick={addToFavoritesHandler}
                 >
-                  Add to Favorites
+                  Add <br/> to Favorites
                 </button>
               )}
             </div>
           </div>
         </div>
       </div>
-      <div className="row h-25 weather-text-row">
+      <div className="row m-2 h-25 weather-text-row">
         <div className="col d-flex justify-content-center display-1">
           {city.weatherText}
         </div>
       </div>
       <div
-        className="row d-flex justify-content-around five-day-row"
+        className="row d-flex justify-content-around five-day-row m-2"
       >
         {dailyForecastArray.map((todaysWeather) => (
           <div
             key={todaysWeather.EpochDate}
-            className="col-5 col-md-2 border d-flex justify-content-evenly align-items-center flex-column"
+            className="col-5 col-md-3 col-xl-2 border d-flex justify-content-evenly align-items-center flex-column m-3"
             style={{height: "25vh"}}
           >
             <div>

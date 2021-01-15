@@ -10,7 +10,7 @@ function Header() {
   return (
     <div className="container-fluid header">
       <nav
-        className="row d-flex justify-content-start justify-content-sm-end bg-secondary"
+        className="row d-flex justify-content-start justify-content-sm-center justify-content-md-end bg-secondary"
         style={{ height: "5vh" }}
       >
         <Link
@@ -18,7 +18,7 @@ function Header() {
           to="/"
           className={
             (location.pathname === "/" ? "selected " : "") +
-            "link d-flex col-5 col-sm-4 col-lg-3 col-xl-2 justify-content-center align-items-center"
+            "link d-flex col-6 col-sm-4 col-md-3 col-xl-2 justify-content-center align-items-center"
           }
         >
           Home
@@ -27,7 +27,7 @@ function Header() {
           to="/favorites"
           className={
             (location.pathname === "/favorites" ? "selected " : "") +
-            "link d-flex col-5 col-sm-4 col-lg-3 col-xl-2 p-0 justify-content-center align-items-center"
+            "link d-flex col-6 col-sm-4 col-md-3 col-xl-2 p-0 justify-content-center align-items-center"
           }
         >
           Favorites

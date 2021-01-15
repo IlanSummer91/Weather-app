@@ -13,7 +13,7 @@ function Favorite(props) {
         context.setClickedFavoriteLocation(props.city.name);
       }}
       to="/"
-      className="favorite-link col-5 col-lg-3 col-xl-2 d-flex justify-content-evenly flex-column text-center"
+      className="favorite-link col-5 col-sm-4 col-lg-3 col-xl-2 d-flex justify-content-evenly flex-column text-center"
       style={{ height: "25vh" }}
     >
         <div>
