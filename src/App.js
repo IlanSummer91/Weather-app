@@ -7,11 +7,14 @@ import { AppContext } from "./AppContext";
 import { useState } from "react";
 
 function App() {
-  const [currentCity, setCurrentCity] = useState();
-  
+  const [favoritesArray, setFavoritesArray] = useState([]);
+  const [clickedFavoriteLocation, setClickedFavoriteLocation] = useState();
+
   const appContextValue = {
-    currentCity,
-    setCurrentCity
+    favoritesArray,
+    setFavoritesArray,
+    clickedFavoriteLocation,
+    setClickedFavoriteLocation,
   };
 
   return (

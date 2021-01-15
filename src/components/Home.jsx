@@ -12,6 +12,7 @@ function Home() {
   const searchRef = useRef(null);
   const [city, setCity] = useState({});
   const [dailyForecastArray, setDailyForecastArray] = useState([]);
+  const [isFavorited, setIsFavorited] = useState(false);
   const context = useContext(AppContext);
   const arrayTest = [
     {
@@ -41,8 +42,10 @@ function Home() {
     },
   ];
 
-  const searchHandler = async () => {
-    const searchValue = searchRef.current.value;
+  const searchHandler = async (
+    location = context.clickedFavoriteLocation || "tel aviv"
+  ) => {
+    const searchValue = searchRef.current.value || location;
     // const result = await fetchCity(searchValue || "tel aviv");
 
     const result = [
@@ -54,11 +57,43 @@ function Home() {
         Key: 214,
         LocalizedName: "Haifa",
       },
+      {
+        Key: 215,
+        LocalizedName: "Jerusalem",
+      },
+      {
+        Key: 216,
+        LocalizedName: "Hadera",
+      },
+      {
+        Key: 217,
+        LocalizedName: "Netanya",
+      },
+      {
+        Key: 218,
+        LocalizedName: "qwe",
+      },
+      {
+        Key: 219,
+        LocalizedName: "asd",
+      },
+      {
+        Key: 220,
+        LocalizedName: "zxc",
+      },
+      {
+        Key: 221,
+        LocalizedName: "wer",
+      },
+      {
+        Key: 222,
+        LocalizedName: "sdf",
+      },
     ];
 
     const currentWeather = [
       {
-        WeatherText: "Partly cloudy with a thunderstorm",
+        WeatherText: "Cloudy",
         Temperature: { Metric: { Value: 24.0 } },
       },
     ];
@@ -70,8 +105,7 @@ function Home() {
 
     const foundCity = result.find(
       (cityObj) =>
-        cityObj.LocalizedName.toLowerCase() === searchValue.toLowerCase() ||
-        "tel aviv"
+        cityObj.LocalizedName.toLowerCase() === searchValue.toLowerCase()
     );
     if (result.length <= 0) {
       alert("City doesn't exist! please make sure to only use English letters");
@@ -83,18 +117,45 @@ function Home() {
       if (currentWeather.length <= 0) {
         alert("Something is wrong, please contact our support team");
       } else {
-        console.log("got here")
         setCity({
-          key: foundCity.Key,
+          id: foundCity.Key,
           name: foundCity.LocalizedName,
           weatherText: currentWeather[0].WeatherText,
           metricValue: Math.round(currentWeather[0].Temperature.Metric.Value),
         });
-        console.log(city);
-        context.setCurrentCity(city);
+        const existsInFavoriteArray = context.favoritesArray.find(
+          (element) => element.name === foundCity.LocalizedName
+        );
+        existsInFavoriteArray === undefined
+          ? setIsFavorited(false)
+          : setIsFavorited(true);
       }
     }
     searchRef.current.value = "";
+  };
+
+  const addToFavoritesHandler = () => {
+    const isFavoriteAlreadyAdded = context.favoritesArray.find(
+      (element) => element.name === city.name
+    );
+    if (isFavoriteAlreadyAdded === undefined) {
+      context.setFavoritesArray([...context.favoritesArray, city]);
+      setIsFavorited(true);
+    } else {
+      alert("This location has already been added to your favorites!");
+    }
+  };
+
+  const removeFromFavoritesHandler = () => {
+    const newArray = context.favoritesArray.filter(
+      (item) => item.name !== city.name
+    );
+    if (context.favoritesArray.length === newArray.length) {
+      alert("This location does not exist in your favorites list!");
+    } else {
+      context.setFavoritesArray(newArray);
+      setIsFavorited(false);
+    }
   };
 
   useEffect(() => {
@@ -102,12 +163,9 @@ function Home() {
   }, []);
 
   return (
-    <div
-      className="container-fluid home bg-dark"
-      style={{ height: "95vh", backgroundColor: "" }}
-    >
-      <div className="row">
-        <div className="d-flex justify-content-center m-4">
+    <div className="home">
+      <div className="row search-row" style={{ height: "15vh" }}>
+        <div className="d-flex justify-content-center align-items-center m-4">
           <input
             className="col-4"
             ref={searchRef}
@@ -117,30 +175,59 @@ function Home() {
           />
         </div>
       </div>
-      <div className="row search-container m-5" style={{ height: "10vh" }}>
-        <div className="col d-flex justify-content-between">
+    <div className="container bg-dark" style={{ height: "80vh" }}>
+      <div className="row favorites-row h-25">
+        <div className="col m-5 d-flex justify-content-between">
           <div>
-            <h3>{city.name}</h3>
+            <h3 className="overflow-hidden">{city.name}</h3>
             <span>{city.metricValue + "°C"}</span>
           </div>
-          <button className="d-flex align-items-center h-25 btn btn-outline-light">
-            Add to Favorites
-          </button>
+          <div>
+            <div className="d-flex justify-content-center align-items-center">
+              {isFavorited ? (<i
+                className="favorited star fa fa-star p-2"
+                aria-hidden="true"
+                onClick={removeFromFavoritesHandler}
+              ></i>) :
+              (<i
+                className="star fa fa-star p-2"
+                aria-hidden="true"
+                onClick={addToFavoritesHandler}
+              ></i>)}
+              {isFavorited ? (
+                <button
+                  className="d-flex align-items-center justify-content-center btn btn-outline-light favorite-button overflow-hidden"
+                  style={{width: "20vw"}}
+                  onClick={removeFromFavoritesHandler}
+                >
+                  Remove from Favorites
+                </button>
+              ) : (
+                <button
+                  className="d-flex align-items-center justify-content-center btn btn-outline-light favorite-button overflow-hidden"
+                  style={{width: "20vw"}}
+                  onClick={addToFavoritesHandler}
+                >
+                  Add to Favorites
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-      <div className="row h-25">
+      <div className="row h-25 weather-text-row">
         <div className="col d-flex justify-content-center display-1">
           {city.weatherText}
         </div>
       </div>
       <div
-        className="row d-flex justify-content-around"
-        style={{ height: "20vh" }}
+        className="row d-flex justify-content-around five-day-row"
       >
         {dailyForecastArray.map((todaysWeather) => (
           <div
             key={todaysWeather.EpochDate}
-            className="col-5 col-md-1 border d-flex justify-content-around align-items-center flex-column"
+            className="col-5 col-md-2 border d-flex justify-content-evenly align-items-center flex-column"
+            style={{height: "25vh"}}
           >
             <div>
               {new Date(todaysWeather.Date).toLocaleDateString("en-us", {
@@ -153,6 +240,7 @@ function Home() {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 }

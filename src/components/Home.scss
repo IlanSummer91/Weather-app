@@ -1,9 +1,23 @@
 .home {
   color: white;
   font-size: 20px;
-}
 
-input[type="search"] {
-  font-family: "FontAwesome";
-  padding-left: 8px;
+  input[type="search"] {
+    font-family: "FontAwesome";
+    padding-left: 8px;
+    height: 5vh;
+  }
+  
+  .favorited {
+    color: yellow;
+  }
+  
+  .star {
+    cursor: pointer;
+  }
+
+  .btn-outline-light:focus,
+  .btn-outline-light:focus {
+    box-shadow: 0 0 0 0;
+  }
 }

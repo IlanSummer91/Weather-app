@@ -1,32 +1,33 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { AppContext } from "../AppContext";
 import "./Header.scss";
 
 function Header() {
-  const [clickedLink, setClickedLink] = useState("Home");
+  const location = useLocation();
+  const context = useContext(AppContext);
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid header">
       <nav
-        className="row d-flex justify-content-end bg-secondary"
+        className="row d-flex justify-content-start justify-content-sm-end bg-secondary"
         style={{ height: "5vh" }}
       >
         <Link
-          onClick={() => setClickedLink("Home")}
+          onClick={() => context.setClickedFavoriteLocation("tel aviv")}
           to="/"
           className={
-            (clickedLink === "Home" ? "selected " : "") +
-            "link d-flex col-2 col-sm-1 justify-content-center align-items-center"
+            (location.pathname === "/" ? "selected " : "") +
+            "link d-flex col-5 col-sm-4 col-lg-3 col-xl-2 justify-content-center align-items-center"
           }
         >
           Home
         </Link>
         <Link
-          onClick={() => setClickedLink("Favorites")}
           to="/favorites"
           className={
-            (clickedLink === "Favorites" ? "selected " : "") +
-            "link d-flex col-2 col-lg-1 p-0 justify-content-center align-items-center"
+            (location.pathname === "/favorites" ? "selected " : "") +
+            "link d-flex col-5 col-sm-4 col-lg-3 col-xl-2 p-0 justify-content-center align-items-center"
           }
         >
           Favorites
